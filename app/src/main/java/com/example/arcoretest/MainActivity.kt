@@ -1,15 +1,15 @@
 package com.example.arcoretest
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import com.example.arcoretest.ui.theme.ARcoreTestTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,30 +17,44 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ARcoreTestTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                ARView()
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+//@Composable
+//fun ARView() {
+//    val context = LocalContext.current
+//
+//    AndroidView(
+//        modifier = Modifier.fillMaxSize(),
+//        factory = { ctx ->
+//            ARSceneView(ctx).apply {
+//                // 3Dモデルのノードを作成して追加
+//                val modelNode = ArModelNode(ctx).apply {
+//                    loadModelGlbAsync(
+//                        context = context,
+//                        glbFileLocation = "models/model.glb",
+//                        autoAnimate = true,
+//                        scaleToUnits = 1.0f
+//                    ) { success ->
+//                        if (success) {
+//                            Toast.makeText(context, "Model loaded successfully", Toast.LENGTH_SHORT).show()
+//                        } else {
+//                            Toast.makeText(context, "Failed to load model", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                }
+//
+//                // ノードをシーンに追加
+//                scene.addChild(modelNode)
+//            }
+//        }
+//    )
+//}
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    ARcoreTestTheme {
-        Greeting("Android")
-    }
+fun ARView(){
+    Text(text = "Hello, ARCore!")
 }
