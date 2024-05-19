@@ -1,21 +1,23 @@
 package com.example.arcoretest
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
 import com.example.arcoretest.ui.theme.ARcoreTestTheme
-import io.github.sceneview.Scene
+import com.google.ar.core.Frame
+import io.github.sceneview.ar.ARScene
 import io.github.sceneview.math.Position
+import io.github.sceneview.math.Scale
 import io.github.sceneview.node.ModelNode
 import io.github.sceneview.rememberEngine
-import io.github.sceneview.rememberEnvironmentLoader
 import io.github.sceneview.rememberModelLoader
 import io.github.sceneview.rememberNodes
 
@@ -63,19 +65,44 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ARView(){
+    val context = LocalContext.current
     val engine = rememberEngine()
     val modelLoader = rememberModelLoader(engine)
-    val environmentLoader = rememberEnvironmentLoader(engine)
-    val context = LocalContext.current
-    Scene(
+    var frame by remember { mutableStateOf<Frame?>(null) }
+    val childNodes = rememberNodes()
+//    ARScene(
+//        modifier = Modifier.fillMaxSize(),
+//        engine = engine,
+//        modelLoader = modelLoader,
+//        onSessionUpdated = { session, updatedFrame ->
+//            frame = updatedFrame
+//        },
+//        onGestureListener = rememberOnGestureListener(
+//            onSingleTapConfirmed = { motionEvent, node ->
+//                val hitResults = frame?.hitTest(motionEvent.x, motionEvent.y)
+//                val anchor = hitResults?.firstOrNull {
+//                    it.isValid(depthPoint = false, point = false)
+//                }?.createAnchorOrNull()
+//
+//                if (anchor != null) {
+//                    val anchorNode = AnchorNode(engine = engine, anchor = anchor)
+//                    anchorNode.addChildNode(
+//                        ModelNode(modelInstance = modelLoader.createInstance(model)!!)
+//                    )
+//                    childNodes += anchorNode
+//                }
+//            }
+//        )
+//    )
+    ARScene(
         modifier = Modifier.fillMaxSize(),
         engine = engine,
         modelLoader = modelLoader,
         childNodes = rememberNodes {
-            add(ModelNode(modelLoader.createModelInstance(R.raw.penguin)).apply {
-                // Move the node 4 units in Camera front direction
-                position = Position(z = -4.0f)
-            })
+                add(ModelNode(modelLoader.createModelInstance(R.raw.cute_demon)).apply {
+                    scale = Scale(0.1f)
+//                    position = Position(x = it.toFloat() * -1)
+                })
         },
 //        environment = environmentLoader.createHDREnvironment("environment.hdr")!!
     )
